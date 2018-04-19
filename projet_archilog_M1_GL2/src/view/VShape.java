@@ -34,8 +34,8 @@ public class VShape {
 		
 		((Node) rect.get_rectangle()).addEventHandler(MouseEvent.MOUSE_PRESSED, ControllerFacade.DragPressed);
         ((Node) poly.getPolygon()).addEventHandler(MouseEvent.MOUSE_PRESSED, ControllerFacade.DragPressed);
-        ((Node) rect.get_rectangle()).addEventHandler(MouseEvent.MOUSE_RELEASED, ControllerFacade.DragReleased);
-        ((Node) poly.getPolygon()).addEventHandler(MouseEvent.MOUSE_RELEASED, ControllerFacade.DragReleased);
+        ((Node) rect.get_rectangle()).addEventHandler(MouseEvent.MOUSE_RELEASED, ControllerFacade.RectangleDragReleased);
+        ((Node) poly.getPolygon()).addEventHandler(MouseEvent.MOUSE_RELEASED, ControllerFacade.PolygonDragReleased);
         
         for(IShape each : ControllerFacade.getGroupOfShapes().get_shapes()) {
         	if(each instanceof CRectangle)

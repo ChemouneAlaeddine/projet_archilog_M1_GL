@@ -3,6 +3,9 @@ package controller;
 import model.*;
 import view.*;
 
+import java.time.Duration;
+
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -64,17 +67,18 @@ public class ControllerFacade {
 		}
 	};
 	
-	public static EventHandler<MouseEvent> DragReleased = new EventHandler<MouseEvent>() {
+	// Drag rectangle from toolbar
+	public static EventHandler<MouseEvent> RectangleDragReleased = new EventHandler<MouseEvent>() {
 		@Override
 		public void handle(MouseEvent event) {
-		    if (event.getButton() == MouseButton.PRIMARY) {
-                if (!(event.getPickResult().getIntersectedNode() instanceof HBox) &&
+			if (event.getButton() == MouseButton.PRIMARY) {
+				if (!(event.getPickResult().getIntersectedNode() instanceof HBox) &&
                 		!(event.getPickResult().getIntersectedNode() instanceof VBox) &&
                 		!(event.getPickResult().getIntersectedNode() instanceof Button) &&
                 		!(event.getPickResult().getIntersectedNode() instanceof Rectangle) &&
                 		!(event.getPickResult().getIntersectedNode() instanceof Polygon)) {
-                    if (event.getSource() instanceof Rectangle) {
-                        CRectangle myShapeSource = new CRectangle(new Position(((Rectangle)event.getSource()).getX(),((Rectangle)event.getSource()).getY()));
+					if (event.getSource() instanceof Rectangle) {
+						CRectangle myShapeSource = new CRectangle(new Position(((Rectangle)event.getSource()).getX(),((Rectangle)event.getSource()).getY()));
                         myShapeSource.set_rectangle((Rectangle)event.getSource());
                     	System.out.println("released");
 	                    if(!(event.getPickResult().getIntersectedNode() instanceof ImageView)) {
@@ -82,7 +86,7 @@ public class ControllerFacade {
 	                    	CRectangle myNewShape = (CRectangle) myShapeSource.clone();
 	                        ((Rectangle) myNewShape.get_rectangle()).setX(event.getSceneX());
 	                        ((Rectangle) myNewShape.get_rectangle()).setY(event.getSceneY());
-	                        ((Node) myNewShape.get_rectangle()).addEventHandler(MouseEvent.MOUSE_RELEASED, ControllerFacade.Moving);
+	                        ((Node) myNewShape.get_rectangle()).addEventHandler(MouseEvent.MOUSE_RELEASED, ControllerFacade.RectangleMoving);
 	                        myNewShape.draw(View.getInstance().getGroup());
                     	}else {
                     		System.out.println("sur buton1");
@@ -92,56 +96,68 @@ public class ControllerFacade {
 	                			view.getInstance().getvBox().getChildren().remove((Rectangle) myShapeSource.get_rectangle());
                     		}
                     	}
-                        
-                    }else {
-                    	if (event.getSource() instanceof Polygon) {
-                            CPolygon myShapeSource = new CPolygon(new Position(((Polygon)event.getSource()).getPoints().get(0),((Polygon)event.getSource()).getPoints().get(1)),10);
-                            myShapeSource.setPolygon((Polygon)event.getSource());
-                        	System.out.println("released");
-                        	if(!(event.getPickResult().getIntersectedNode() instanceof ImageView)) {
-	                            CPolygon myNewShape = (CPolygon) myShapeSource.clone();
-	                            Polygon pol = (Polygon) cShapeFactory.createPoly(new Position(event.getSceneX(),event.getSceneY()), myNewShape.getSide());
-	                            myNewShape.setPolygon(pol);
-	                            ((Node) myNewShape.getPolygon()).addEventHandler(MouseEvent.MOUSE_RELEASED, ControllerFacade.Moving);
-	                            myNewShape.draw(View.getInstance().getGroup());
-                        	}else {
-                        		System.out.println("sur buton1");
-                        		if((event.getPickResult().getIntersectedNode() == view.getDelete())){
-                        			System.out.println("sur buton2");
-                        			getGroupOfShapes().removeChild(myShapeSource);
-    	                			view.getInstance().getvBox().getChildren().remove((Polygon) myShapeSource.getPolygon());
-                        		}
-                        	}
-                    	}
-                    }
-                }
-            }
+					}
+				}
+			}
 		}
 	};
 	
-	public static EventHandler<MouseEvent> Moving = new EventHandler<MouseEvent>() {
+	
+	// Drag polygon from toolbar
+		public static EventHandler<MouseEvent> PolygonDragReleased = new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				if (event.getButton() == MouseButton.PRIMARY) {
+					if (!(event.getPickResult().getIntersectedNode() instanceof HBox) &&
+	                		!(event.getPickResult().getIntersectedNode() instanceof VBox) &&
+	                		!(event.getPickResult().getIntersectedNode() instanceof Button) &&
+	                		!(event.getPickResult().getIntersectedNode() instanceof Rectangle) &&
+	                		!(event.getPickResult().getIntersectedNode() instanceof Polygon)) {
+						if (event.getSource() instanceof Polygon) {							
+							CPolygon myShapeSource = new CPolygon(new Position(((Polygon)event.getSource()).getPoints().get(0),((Polygon)event.getSource()).getPoints().get(1)),10);
+							myShapeSource.setPolygon((Polygon)event.getSource());
+	                    	System.out.println("released");
+		                    if(!(event.getPickResult().getIntersectedNode() instanceof ImageView)) {
+		                    	System.out.println("pas sur buton");
+		                    	CPolygon myNewShape = (CPolygon) myShapeSource.clone();
+		                    	Polygon pol = (Polygon) cShapeFactory.createPoly(new Position(event.getSceneX(),event.getSceneY()), myNewShape.getSide());
+	                            myNewShape.setPolygon(pol);
+		                        ((Node) myNewShape.getPolygon()).addEventHandler(MouseEvent.MOUSE_RELEASED, ControllerFacade.PolygonMoving);
+		                        myNewShape.draw(View.getInstance().getGroup());
+	                    	}else {
+	                    		System.out.println("sur buton1");
+	                    		if((event.getPickResult().getIntersectedNode() == view.getDelete())){
+	                    			System.out.println("sur buton2");
+	                    			getGroupOfShapes().removeChild(myShapeSource);
+		                			view.getInstance().getvBox().getChildren().remove((Polygon) myShapeSource.getPolygon());
+	                    		}
+	                    	}
+						}
+					}
+				}
+			}
+		};
+
+	// Drag Rectangle from board
+	public static EventHandler<MouseEvent> RectangleMoving = new EventHandler<MouseEvent>() {
 		@Override
 		public void handle(MouseEvent event) {
-		    if (event.getButton() == MouseButton.PRIMARY) {
-                if (!(event.getPickResult().getIntersectedNode() instanceof HBox) &&
+			if (event.getButton() == MouseButton.PRIMARY) {
+				if (!(event.getPickResult().getIntersectedNode() instanceof HBox) &&
                 		!(event.getPickResult().getIntersectedNode() instanceof Button) &&
                 		!(event.getPickResult().getIntersectedNode() instanceof Rectangle) &&
                 		!(event.getPickResult().getIntersectedNode() instanceof Polygon)) {
-                    if(event.getSource() instanceof Shape) {
-	                	if (event.getSource() instanceof Rectangle) {
-	                		System.out.println("here");
+					if(event.getSource() instanceof Shape) {
+						if (event.getSource() instanceof Rectangle) {
 	                        CRectangle myShapeSource = new CRectangle(new Position(((Rectangle)event.getSource()).getX(),((Rectangle)event.getSource()).getY()));
 	                        myShapeSource.set_rectangle((Rectangle)event.getSource());
-	                    	System.out.println("moved");
 	                    	if(!(event.getPickResult().getIntersectedNode() instanceof VBox) &&
 	                    			!(event.getPickResult().getIntersectedNode() instanceof ImageView)) {
 		                    	((Rectangle) myShapeSource.get_rectangle()).setX(event.getSceneX());
 		                        ((Rectangle) myShapeSource.get_rectangle()).setY(event.getSceneY());
 	                		}else {
 	                			if((event.getPickResult().getIntersectedNode() instanceof ImageView)) {
-	                				System.out.println("sur buton1");
 	                        		if((event.getPickResult().getIntersectedNode() == view.getDelete())){
-	                        			System.out.println("supprimer le shape");
 	                        			View.getInstance().getGroup().getChildren().remove(myShapeSource.get_rectangle());
 	                        		}
 	                			}else {
@@ -149,43 +165,54 @@ public class ControllerFacade {
 		                			myShapeSource.set_position(new Position(0,groupOfShapes.get_shapes().size()*20));
 		                			getGroupOfShapes().addChild(myShapeSource);
 		                			view.getInstance().getvBox().getChildren().add((Rectangle) myShapeSource.get_rectangle());
-		                			((Node) myShapeSource.get_rectangle()).addEventHandler(MouseEvent.MOUSE_RELEASED, ControllerFacade.DragReleased);
-		                			System.out.println("add to toolbar");
+		                			((Node) myShapeSource.get_rectangle()).addEventHandler(MouseEvent.MOUSE_RELEASED, ControllerFacade.RectangleDragReleased);
 	                			}
 	                		}
-	                    }else {
-	                    	if (event.getSource() instanceof Polygon) {
-	                            CPolygon myShapeSource = new CPolygon(new Position(((Polygon)event.getSource()).getPoints().get(0),((Polygon)event.getSource()).getPoints().get(1)),10);
-	                            myShapeSource.setPolygon((Polygon)event.getSource());
-	                        	System.out.println("moved");
-	                        	if(!(event.getPickResult().getIntersectedNode() instanceof VBox) &&
-	                        			!(event.getPickResult().getIntersectedNode() instanceof ImageView)) {
-		                            Polygon pol = (Polygon) cShapeFactory.createPoly(new Position(event.getSceneX(),event.getSceneY()), myShapeSource.getSide());
-		                            myShapeSource.getPolygon().getPoints().clear();
-		                            myShapeSource.getPolygon().getPoints().addAll(pol.getPoints());
-	                        	}else {
-	                        		if((event.getPickResult().getIntersectedNode() instanceof ImageView)) {
-	                        			System.out.println("sur buton1");
-		                        		if((event.getPickResult().getIntersectedNode() == view.getDelete())){
-		                        			System.out.println("supprimer le shape");
-		                        			View.getInstance().getGroup().getChildren().remove(myShapeSource.getPolygon());
-		                        		}
-	                        		}else {
-		                        		groupOfShapes.addChild(myShapeSource);
-		                        		myShapeSource.set_position(new Position(0,groupOfShapes.get_shapes().size()*20));
-			                			getGroupOfShapes().addChild(myShapeSource);
-			                			view.getInstance().getvBox().getChildren().add((Polygon) myShapeSource.getPolygon());
-			                			((Node) myShapeSource.getPolygon()).addEventHandler(MouseEvent.MOUSE_RELEASED, ControllerFacade.DragReleased);
-		                        		System.out.println("add to toolbar");
-	                        		}
-	                        	}
-	                    	}
-	                    }
-                    }
-                }
-            }
+						}
+					}
+				}
+			}
 		}
 	};
+	
+	// Drag Polygon from board
+	public static EventHandler<MouseEvent> PolygonMoving = new EventHandler<MouseEvent>() {
+		@Override
+		public void handle(MouseEvent event) {
+			if (event.getButton() == MouseButton.PRIMARY) {
+				if (!(event.getPickResult().getIntersectedNode() instanceof HBox) &&
+                		!(event.getPickResult().getIntersectedNode() instanceof Button) &&
+                		!(event.getPickResult().getIntersectedNode() instanceof Rectangle) &&
+                		!(event.getPickResult().getIntersectedNode() instanceof Polygon)) {
+					if(event.getSource() instanceof Shape) {
+						if (event.getSource() instanceof Polygon) {
+							CPolygon myShapeSource = new CPolygon(new Position(((Polygon)event.getSource()).getPoints().get(0),((Polygon)event.getSource()).getPoints().get(1)),10);
+                            myShapeSource.setPolygon((Polygon)event.getSource());
+                        	if(!(event.getPickResult().getIntersectedNode() instanceof VBox) &&
+                        			!(event.getPickResult().getIntersectedNode() instanceof ImageView)) {
+	                            Polygon pol = (Polygon) cShapeFactory.createPoly(new Position(event.getSceneX(),event.getSceneY()), myShapeSource.getSide());
+	                            myShapeSource.getPolygon().getPoints().clear();
+	                            myShapeSource.getPolygon().getPoints().addAll(pol.getPoints());
+                        	}else {
+                        		if((event.getPickResult().getIntersectedNode() instanceof ImageView)) {
+	                        		if((event.getPickResult().getIntersectedNode() == view.getDelete())){
+	                        			View.getInstance().getGroup().getChildren().remove(myShapeSource.getPolygon());
+	                        		}
+                        		}else {
+	                        		groupOfShapes.addChild(myShapeSource);
+	                        		myShapeSource.set_position(new Position(0,groupOfShapes.get_shapes().size()*20));
+		                			getGroupOfShapes().addChild(myShapeSource);
+		                			view.getInstance().getvBox().getChildren().add((Polygon) myShapeSource.getPolygon());
+		                			((Node) myShapeSource.getPolygon()).addEventHandler(MouseEvent.MOUSE_RELEASED, ControllerFacade.PolygonDragReleased);
+                        		}
+                        	}
+						}
+					}
+				}
+			}
+		}
+	};
+
 	
 	public static EventHandler<MouseEvent> SelectShapes = new EventHandler<MouseEvent>() {
 		@Override
