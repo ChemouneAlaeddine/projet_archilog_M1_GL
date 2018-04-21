@@ -1,7 +1,11 @@
 package view;
 
+import model.*;
+import controller.*;
+
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
@@ -23,6 +27,7 @@ public class VButton {
 		Button save = new Button();
 		save.setGraphic(imgSave);
 		save.setMaxSize(20, 20);
+		save.addEventHandler(MouseEvent.MOUSE_PRESSED, ControllerFacade.buttonSave);
 		
 		ImageView imgLoad = new ImageView("img/computer-from-floppy-load-512.png");
 		imgLoad.setFitHeight(20);
@@ -30,6 +35,7 @@ public class VButton {
 		Button load = new Button();
 		load.setGraphic(imgLoad);
 		load.setMaxSize(20, 20);
+		load.addEventHandler(MouseEvent.MOUSE_PRESSED, ControllerFacade.buttonSave);
 		
 		ImageView imgUndo = new ImageView("img/undo.png");
 		imgUndo.setFitHeight(20);
@@ -37,6 +43,7 @@ public class VButton {
 		Button undo = new Button();
 		undo.setGraphic(imgUndo);
 		undo.setMaxSize(20, 20);
+		//undo.addEventHandler(MouseEvent.MOUSE_PRESSED, ControllerFacade.OnMousePressedUndo);
 		
 		ImageView imgRedo = new ImageView("img/redo.png");
 		imgRedo.setFitHeight(20);
@@ -44,6 +51,7 @@ public class VButton {
 		Button redo = new Button();
 		redo.setGraphic(imgRedo);
 		redo.setMaxSize(20, 20);
+		//redo.addEventHandler(MouseEvent.MOUSE_PRESSED, ControllerFacade.OnMousePressedRedo);
 		
 		/*ImageView imgDelete = new ImageView("img/trash.png");
 		imgDelete.setFitHeight(20);

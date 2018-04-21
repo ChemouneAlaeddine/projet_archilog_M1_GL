@@ -35,11 +35,13 @@ public class View implements Observer {
 	private VShape vShape;
 	private HBox hBox;
 	private BorderPane borderPane;
-	private Group group;
+	private Board board;
+	//private Group group;
 	private Scene scene;
 	//private Button delete;
 	private ImageView delete;
-	private VBox vBox;
+	private Toolbar toolbar;
+	//private VBox vBox;
 	
 	public static View getInstance() {
 		if(view == null)
@@ -50,8 +52,8 @@ public class View implements Observer {
 	public void init(Stage primaryStage) {
 		primaryStage.setTitle("Editeur de figures");
 		borderPane = new BorderPane();
-		group = new Group();
-		group.setManaged(false);
+		board = new Board();
+		board.getGroup().setManaged(false);
 		scene = new Scene(borderPane,600,500);
 		primaryStage.setScene(scene);
 		
@@ -61,14 +63,14 @@ public class View implements Observer {
 		hBox.setPadding(new Insets(10));
 		hBox.setSpacing(10);
 		
-		vBox = new VBox(8);
-		vBox.setStyle("-fx-border-color: black;-fx-background-color: #d3d3d3; -fx-padding: 17;-fx-spacing: 15;");
-		vBox.setAlignment(Pos.TOP_CENTER);
-        vBox.setPickOnBounds(true);
-		vBox.setPadding(new Insets(10));
+		toolbar = new Toolbar(8);
+		toolbar.getvBox().setStyle("-fx-border-color: black;-fx-background-color: #d3d3d3; -fx-padding: 17;-fx-spacing: 15;");
+		toolbar.getvBox().setAlignment(Pos.TOP_CENTER);
+		toolbar.getvBox().setPickOnBounds(true);
+		toolbar.getvBox().setPadding(new Insets(10));
 		
 		vShape = VShape.getInstance();
-		vShape.drawShapes(vBox, primaryStage);
+		vShape.drawShapes(toolbar , primaryStage);
 		//vShape.SelectionShapes(group, primaryStage);
 		
 		/**
@@ -84,11 +86,11 @@ public class View implements Observer {
 		delete.setFitHeight(55);
 		delete.setFitWidth(65);
 		
-		vBox.getChildren().addAll(delete);
+		toolbar.getvBox().getChildren().addAll(delete);
 		
-		borderPane.setLeft(vBox);
+		borderPane.setLeft(toolbar.getvBox());
 		borderPane.setTop(hBox);
-		borderPane.setCenter(group);
+		borderPane.setCenter(board.getGroup());
 		borderPane.setBottom(delete);
 		primaryStage.show();
 	}
@@ -99,10 +101,6 @@ public class View implements Observer {
 
 	public HBox getHbox() {
 		return hBox;
-	}
-
-	public VBox getVbox() {
-		return vBox;
 	}
 
 	public static View getView() {
@@ -125,17 +123,25 @@ public class View implements Observer {
 		return scene;
 	}
 
-	public VBox getvBox() {
-		return vBox;
-	}
-
-	public Group getGroup() {
-		return group;
-	}
-
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public Board getBoard() {
+		return board;
+	}
+
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+
+	public Toolbar getToolbar() {
+		return toolbar;
+	}
+
+	public void setToolbar(Toolbar toolbar) {
+		this.toolbar = toolbar;
 	}
 }

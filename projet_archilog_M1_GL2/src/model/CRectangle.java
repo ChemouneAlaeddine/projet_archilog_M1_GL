@@ -16,8 +16,8 @@ public class CRectangle implements IShape {
 	
 	public CRectangle(Position position) {
 		Rectangle rect = new Rectangle();
-		rect.setX(position.x);
-		rect.setY(position.y);
+		rect.setX(position.getX());
+		rect.setY(position.getY());
 		rect.setWidth(this.width);
 		rect.setHeight(this.height);
 		rect.setFill(Color.GREEN);

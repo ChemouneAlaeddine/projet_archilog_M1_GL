@@ -1,11 +1,12 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 //import java.util.Iterator;
 
 import javafx.beans.InvalidationListener;
 
-public class GroupOfShapes implements IShape {
+public class GroupOfShapes implements IShape, Serializable {
 
 	private ArrayList<IShape> _shapes;
 	
@@ -61,6 +62,10 @@ public class GroupOfShapes implements IShape {
 
 	public ArrayList<IShape> get_shapes() {
 		return _shapes;
+	}
+
+	public void set_shapes(ArrayList<IShape> _shapes) {
+		this._shapes = _shapes;
 	}
 
 }

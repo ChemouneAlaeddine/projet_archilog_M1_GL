@@ -14,11 +14,11 @@ public class CPolygon implements IShape {
 	
 	public CPolygon(Position pos, double side){
 	       Polygon poly = new Polygon(new double[] {
-	    		   pos.x,pos.y,
-	    		   pos.x + side,pos.y + side,
-	    		   pos.x + side/2,pos.y + 2*side,
-	    		   pos.x - side/2,pos.y + 2*side,
-	    		   pos.x - side,pos.y + side
+	    		   pos.getX(),pos.getY(),
+	    		   pos.getX() + side,pos.getY() + side,
+	    		   pos.getX() + side/2,pos.getY() + 2*side,
+	    		   pos.getX() - side/2,pos.getY() + 2*side,
+	    		   pos.getX() - side,pos.getY() + side
 	       });
 	       poly.setFill(Color.RED);
 	       this.polygon = poly;

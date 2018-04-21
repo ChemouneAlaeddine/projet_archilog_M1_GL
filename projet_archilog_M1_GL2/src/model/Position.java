@@ -1,9 +1,11 @@
 package model;
 
-public class Position {
+import java.io.Serializable;
+
+public class Position implements Serializable {
 	
-	double x;
-	double y;
+	private double x;
+	private double y;
 	
 	public Position (double x, double y) {
 		this.x = x;

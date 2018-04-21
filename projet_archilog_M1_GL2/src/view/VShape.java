@@ -7,6 +7,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import model.*;
@@ -24,24 +25,25 @@ public class VShape {
         return vShape;
     }
 	
-	public void drawShapes(VBox vBox, Stage primaryStage) {
+	public void drawShapes(Toolbar toolbar, Stage primaryStage) {
 		
 		CRectangle rect = new CRectangle(new Position(0,0));
 		CPolygon poly = new CPolygon(new Position(0,20),10);
 		
-		ControllerFacade.getGroupOfShapes().addChild(rect);
-		ControllerFacade.getGroupOfShapes().addChild(poly);
+		toolbar.getGos().addChild(rect);
+		toolbar.getGos().addChild(poly);
 		
-		((Node) rect.get_rectangle()).addEventHandler(MouseEvent.MOUSE_PRESSED, ControllerFacade.DragPressed);
-        ((Node) poly.getPolygon()).addEventHandler(MouseEvent.MOUSE_PRESSED, ControllerFacade.DragPressed);
-        ((Node) rect.get_rectangle()).addEventHandler(MouseEvent.MOUSE_RELEASED, ControllerFacade.RectangleDragReleased);
+		//((Node) rect.get_rectangle()).addEventHandler(MouseEvent.MOUSE_PRESSED, ControllerFacade.DragPressed);
+		((Node) rect.getRectangle()).addEventHandler(MouseEvent.MOUSE_PRESSED, ControllerFacade.DragPressed);
+		((Node) poly.getPolygon()).addEventHandler(MouseEvent.MOUSE_PRESSED, ControllerFacade.DragPressed);
+        ((Node) rect.getRectangle()).addEventHandler(MouseEvent.MOUSE_RELEASED, ControllerFacade.RectangleDragReleased);
         ((Node) poly.getPolygon()).addEventHandler(MouseEvent.MOUSE_RELEASED, ControllerFacade.PolygonDragReleased);
         
-        for(IShape each : ControllerFacade.getGroupOfShapes().get_shapes()) {
+        for(IShape each : View.getInstance().getToolbar().getGos().get_shapes()) {
         	if(each instanceof CRectangle)
-        		vBox.getChildren().add(((CRectangle) each).get_rectangle());
+        		toolbar.getvBox().getChildren().add(((CRectangle) each).get_rectangle());
         	if(each instanceof CPolygon)
-        		vBox.getChildren().add(((CPolygon) each).getPolygon());
+        		toolbar.getvBox().getChildren().add(((CPolygon) each).getPolygon());
         }
 	}
 	

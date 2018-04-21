@@ -7,7 +7,7 @@ import javafx.scene.shape.Rectangle;
 public class CShapeFactory implements ShapeFactory{
     @Override
     public Object createRect(Position pos) {
-    	Rectangle rectangle = new Rectangle(pos.x, pos.y, 30, 20);
+    	Rectangle rectangle = new Rectangle(pos.getX(), pos.getY(), 30, 20);
         rectangle.setFill(Color.GREEN);
         return rectangle;
     }
@@ -15,11 +15,11 @@ public class CShapeFactory implements ShapeFactory{
     @Override
     public Object createPoly(Position pos, double side) {
     	Polygon polygon = new Polygon(new double[] {
-    		pos.x,pos.y,
-    		pos.x + side,pos.y + side,
-    		pos.x + side/2,pos.y + 2*side,
-    		pos.x - side/2,pos.y + 2*side,
-    		pos.x - side,pos.y + side
+    		pos.getX(),pos.getY(),
+    		pos.getX() + side,pos.getY() + side,
+    		pos.getX() + side/2,pos.getY() + 2*side,
+    		pos.getX() - side/2,pos.getY() + 2*side,
+    		pos.getX() - side,pos.getY() + side
         });
         polygon.setFill(Color.RED);
         return polygon;
