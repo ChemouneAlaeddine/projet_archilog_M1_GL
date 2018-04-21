@@ -18,6 +18,7 @@ import java.util.Stack;
 
 import javax.swing.JFileChooser;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -166,23 +167,11 @@ public class ControllerFacade {
 				if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
 					try {
-						//ByteArrayOutputStream baos = new ByteArrayOutputStream();
-						//XMLEncoder xmle = new XMLEncoder(new FileOutputStream(file));
-						//for (IShape shape : View.getInstance().getBoard().getGos().get_shapes()) {
-			            //    xmle.writeObject(new Rectangle(100,100,10,10));
-			            //}
-			            //baos.flush();
-			            //baos.close();
-						
 						ObjectOutputStream oos =  new ObjectOutputStream(new FileOutputStream(file));
-						
-						ArrayList<IShape> list = View.getInstance().getBoard().getGos().get_shapes();
+						ArrayList<IShape> list = new ArrayList<IShape>();
+						list = View.getInstance().getBoard().getGos().get_shapes();
 						oos.writeObject(list);
-						//oos.flush();
-						//oos.writeObject(new String() a = "wagii");
-						/*for(IShape shape : View.getInstance().getBoard().getGos().get_shapes()) {
-							System.out.println(shape);
-						}*/
+						oos.flush();
 						oos.close();
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
@@ -205,22 +194,26 @@ public class ControllerFacade {
 						@SuppressWarnings("resource")
 						ObjectInputStream ois =  new ObjectInputStream(new FileInputStream(file)) ;
 						@SuppressWarnings("unchecked")
-						ArrayList<IShape> list = (ArrayList<IShape>) ois.readObject();
+						//ArrayList<IShape> list = (ArrayList<IShape>) ois.readObject();
+						ArrayList<Position> list = (ArrayList<Position>) ois.readObject();
+						
 						//Main.m.returnWhiteboard().getListShapes().clear();
-						View.getInstance().getBoard().getGos().get_shapes().clear();
-						for(IShape i : list){
-							//Main.m.returnWhiteboard().add(i);
-							View.getInstance().getBoard().getGos().get_shapes().add(i);
+						for(Node each : View.getInstance().getBoard().getGroup().getChildren()) {
+							System.out.println("load");
+							View.getInstance().getBoard().getGroup().getChildren().remove(each);
 						}
-	
-						//Main.m.notifyChangeListShapes((List<IShape>) Main.m.returnWhiteboard().getListShapes());
-	
+						
+						CRectangle cr;
+						for(Position i : list){
+							cr = new CRectangle(i);
+							View.getInstance().getBoard().getGos().get_shapes().add(cr);
+							cr.draw(View.getInstance().getBoard().getGroup());
+						}
 					} catch (FileNotFoundException e) {
 						e.printStackTrace();
 					} catch (IOException e) {
 						e.printStackTrace();
 					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -254,7 +247,7 @@ public class ControllerFacade {
 	                    		if((event.getPickResult().getIntersectedNode() == view.getDelete())){
 	                    			System.out.println("sur buton2");
 	                    			View.getInstance().getBoard().getGos().removeChild(myShapeSource);
-		                			view.getInstance().getToolbar().getvBox().getChildren().remove((Rectangle) myShapeSource.get_rectangle());
+		                			View.getInstance().getToolbar().getvBox().getChildren().remove((Rectangle) myShapeSource.get_rectangle());
 	                    		}
 	                    	}
 						}

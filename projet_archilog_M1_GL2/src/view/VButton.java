@@ -35,7 +35,7 @@ public class VButton {
 		Button load = new Button();
 		load.setGraphic(imgLoad);
 		load.setMaxSize(20, 20);
-		load.addEventHandler(MouseEvent.MOUSE_PRESSED, ControllerFacade.buttonSave);
+		load.addEventHandler(MouseEvent.MOUSE_PRESSED, ControllerFacade.buttonLoading);
 		
 		ImageView imgUndo = new ImageView("img/undo.png");
 		imgUndo.setFitHeight(20);
